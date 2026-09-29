@@ -1,1 +1,378 @@
-index.html.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App Alpha Progression</title>
+    <style>
+        /* CSS Styling: Premium Sea-Blueish Green and Black Theme */
+        :root {
+            --bg-black: #050505;
+            --card-black: #121212;
+            --border-teal: #004d4d;
+            --sea-green: #20B2AA;
+            --bright-teal: #008080;
+            --text-white: #ffffff;
+            --text-gray: #aaaaaa;
+            --accent-red: #ff4d4d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #000000;
+            border: 2px solid var(--border-teal);
+            border-radius: 30px;
+            min-height: 820px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0, 128, 128, 0.15);
+            position: relative;
+        }
+
+        /* Screen States visibility */
+        .screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 24px;
+            flex-grow: 1;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* LOGIN SCREEN DESIGN */
+        .login-header {
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            color: var(--sea-green);
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .login-header p {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--sea-green);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background-color: var(--card-black);
+            border: 1px solid var(--border-teal);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--text-white);
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--sea-green);
+        }
+
+        .tier-selector {
+            margin-bottom: 30px;
+        }
+
+        .tier-selector p {
+            color: var(--text-gray);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .tier-card {
+            background-color: var(--card-black);
+            border: 1px solid var(--border-teal);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tier-card.selected {
+            border-color: var(--sea-green);
+            background-color: rgba(32, 178, 170, 0.05);
+        }
+
+        .tier-name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .tier-price {
+            color: var(--sea-green);
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background-color: var(--sea-green);
+            color: #000000;
+            border: none;
+            border-radius: 14px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+            margin-top: auto;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* MAIN APP HUB */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .app-title h2 {
+            font-size: 20px;
+            color: var(--text-white);
+            font-weight: 800;
+        }
+
+        .app-title span {
+            color: var(--sea-green);
+        }
+
+        .btn-action-mode {
+            background-color: var(--card-black);
+            border: 1px solid var(--border-teal);
+            color: var(--sea-green);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-action-mode.active-edit {
+            background-color: var(--sea-green);
+            color: #000000;
+            border-color: var(--sea-green);
+        }
+
+        /* FREE MACRO TRACKER WIDGET */
+        .macro-box {
+            background-color: var(--card-black);
+            border: 1px solid var(--border-teal);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .macro-box-title {
+            font-size: 13px;
+            color: var(--sea-green);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .macro-box-title span {
+            color: var(--text-gray);
+            font-weight: 400;
+            text-transform: none;
+        }
+
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+
+        .macro-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .macro-circle {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 3px solid var(--border-teal);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--sea-green);
+            position: relative;
+        }
+
+        .macro-item input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed var(--border-teal);
+            color: var(--text-white);
+            text-align: center;
+            font-size: 12px;
+            padding: 4px 0;
+            outline: none;
+        }
+
+        .macro-item input:focus {
+            border-bottom-color: var(--sea-green);
+        }
+
+        .macro-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-top: 4px;
+        }
+
+        /* WEEK VIEW NAVIGATION */
+        .week-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .week-day-btn {
+            background-color: var(--card-black);
+            border: 1px solid var(--border-teal);
+            color: var(--text-gray);
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            min-width: 48px;
+            text-align: center;
+            margin-right: 6px;
+        }
+
+        .week-day-btn.active {
+            background-color: var(--sea-green);
+            color: #000000;
+            border-color: var(--sea-green);
+        }
+
+        /* WORKOUT LIST EXECUTION BLOCK */
+        .workout-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 440px;
+            padding-right: 4px;
+        }
+
+        .day-heading {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-white);
+        }
+
+        .day-split-desc {
+            font-size: 13px;
+            color: var(--sea-green);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .exercise-card {
+            background-color: var(--card-black);
+            border: 1px solid var(--border-teal);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .exercise-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-white);
+            width: 80%;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .exercise-card.editing-active .exercise-title {
+            border-bottom: 1px dashed var(--sea-green);
+            color: var(--sea-green);
+        }
+
+        .exercise-squeeze-note {
+            font-size: 11px;
+            color: var(--sea-green);
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .exercise-metrics {
